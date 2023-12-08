@@ -3,9 +3,9 @@ using Microsoft.Extensions.Logging;
 using StrangeSoft.DotNetInstaller.Core.Logging;
 using StrangeSoft.DotNetInstaller.Core.Platform;
 using StrangeSoft.DotNetInstaller.Core.Platform.Windows;
-using StrangeSoft.DotNetInstaller.Core.Releases;
 using StrangeSoft.DotNetInstaller.Core.Scanner;
 using StrangeSoft.DotNetInstaller.Core.Serialization;
+using StrangeSoft.DotNetInstaller.Core.Tools;
 
 namespace StrangeSoft.DotNetInstaller.Core;
 

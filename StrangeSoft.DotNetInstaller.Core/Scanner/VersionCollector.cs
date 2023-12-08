@@ -2,7 +2,7 @@
 using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.Logging;
 using StrangeSoft.DotNetInstaller.Core.Models.Releases;
-using StrangeSoft.DotNetInstaller.Core.Releases;
+using StrangeSoft.DotNetInstaller.Core.Tools;
 
 namespace StrangeSoft.DotNetInstaller.Core.Scanner;
 
