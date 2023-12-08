@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\StrangeSoft.DotNetInstaller.Core\StrangeSoft.DotNetInstaller.Core.csproj" />
+  </ItemGroup>
+
 </Project>

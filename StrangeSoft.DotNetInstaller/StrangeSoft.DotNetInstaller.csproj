@@ -1,10 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(PublishAsTool)' != 'true'">
+        <PublishAot>true</PublishAot>
+        <RuntimeIdentifiers>osx-arm64;osx-x64;win-x64;win-x86</RuntimeIdentifiers>
+        <PublishDir>../bin/native</PublishDir>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(PublishAsTool)' == 'true'">
+        <ToolCommandName>auto-install</ToolCommandName>
+        <PublishDir>../bin/tool</PublishDir>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <ProjectReference Include="..\StrangeSoft.DotNetInstaller.Core\StrangeSoft.DotNetInstaller.Core.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1"/>
+    </ItemGroup>
 
 </Project>
