@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using StrangeSoft.DotNetInstaller.Core.Models.Releases;
+﻿using StrangeSoft.DotNetInstaller.Core.Models.Releases;
 
 namespace StrangeSoft.DotNetInstaller.Core;
 

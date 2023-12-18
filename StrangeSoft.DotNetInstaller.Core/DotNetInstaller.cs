@@ -11,9 +11,15 @@ public class DotNetInstaller : IDotNetInstaller
     private readonly IHashVerifier _hashVerifier;
     private readonly ILogger<DotNetInstaller> _logger;
     private readonly IPlatformPackageInstaller _installer;
+    private readonly CommandLineOptions _options;
 
-    public DotNetInstaller(HttpClient httpClient, IHashVerifier hashVerifier,
-        IEnumerable<IPlatformPackageInstaller> installers, ILogger<DotNetInstaller> logger)
+    public DotNetInstaller(
+        HttpClient httpClient,
+        IHashVerifier hashVerifier,
+        IEnumerable<IPlatformPackageInstaller> installers,
+        CommandLineOptions options,
+        ILogger<DotNetInstaller> logger
+    )
     {
         _httpClient = httpClient;
         _hashVerifier = hashVerifier;
@@ -22,6 +28,7 @@ public class DotNetInstaller : IDotNetInstaller
         _installer = installer ?? throw new InvalidOperationException(
             "The current operating system is not supported. No installer module could be found."
         );
+        _options = options;
     }
 
     private async Task<(string, bool)> TryGetCachedFile(
@@ -30,6 +37,7 @@ public class DotNetInstaller : IDotNetInstaller
     )
     {
         var fileTempPath = GetDownloadFilePath(downloadInformation);
+        if (_options.NoCache) return (fileTempPath, false);
         if (!File.Exists(fileTempPath)) return (fileTempPath, false);
         await using var existingFileStream = File.Open(fileTempPath, FileMode.Open, FileAccess.Read,
             FileShare.Read | FileShare.Write | FileShare.Delete);
@@ -50,8 +58,9 @@ public class DotNetInstaller : IDotNetInstaller
         _logger.LogInformation("Checking for cached .NET installer with hash: {hash}", downloadInformation.Hash);
         var (fileTempPath, isCached) = await TryGetCachedFile(downloadInformation, cancellationToken);
         if (!isCached)
-        { 
-            _logger.LogInformation("Downloading .NET SDK: {name} from {url}", Path.GetFileName(fileTempPath), downloadInformation.Url);
+        {
+            _logger.LogInformation("Downloading .NET SDK: {name} from {url}", Path.GetFileName(fileTempPath),
+                downloadInformation.Url);
             await DownloadAndWriteFileAsync(downloadInformation.Url, fileTempPath, cancellationToken);
             (_, isCached) = await TryGetCachedFile(downloadInformation, cancellationToken);
             if (!isCached)
@@ -64,7 +73,13 @@ public class DotNetInstaller : IDotNetInstaller
             _logger.LogInformation("Using cached .NET SDK Installer: {name}", Path.GetFileName(fileTempPath));
         }
 
-        return await InstallAsync(fileTempPath, cancellationToken);
+        var returnCode = await InstallAsync(fileTempPath, cancellationToken);
+        if (!_options.NoCache) return returnCode;
+
+        _logger.LogInformation("Deleting {file} because no caching was requested", fileTempPath);
+        File.Delete(fileTempPath);
+
+        return returnCode;
     }
 
     private async Task<int> InstallAsync(string fileTempPath, CancellationToken cancellationToken)

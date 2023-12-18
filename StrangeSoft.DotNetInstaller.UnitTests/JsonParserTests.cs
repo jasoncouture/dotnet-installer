@@ -1,5 +1,4 @@
 using System.Text.Json;
-using StrangeSoft.DotNetInstaller.Core;
 using StrangeSoft.DotNetInstaller.Core.Models;
 using DotNetMetadataJsonSerializerContext = StrangeSoft.DotNetInstaller.Core.Serialization.DotNetMetadataJsonSerializerContext;
 

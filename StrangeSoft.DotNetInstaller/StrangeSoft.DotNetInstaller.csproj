@@ -5,10 +5,11 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PublishAot>true</PublishAot>
     </PropertyGroup>
     <PropertyGroup Condition="'$(PublishAsTool)' != 'true'">
         <PublishAot>true</PublishAot>
-        <RuntimeIdentifiers>osx-arm64;osx-x64;win-x64;win-x86</RuntimeIdentifiers>
+        <RuntimeIdentifiers>osx-arm64;linux-x64;win-x64</RuntimeIdentifiers>
         <PublishDir>../bin/native</PublishDir>
     </PropertyGroup>
     <PropertyGroup Condition="'$(PublishAsTool)' == 'true'">

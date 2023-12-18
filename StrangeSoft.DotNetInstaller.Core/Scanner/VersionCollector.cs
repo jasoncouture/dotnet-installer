@@ -51,13 +51,16 @@ public class VersionCollector(
 
         foreach (var request in versionRequests)
         {
-            logger.LogInformation("Got version request: {request}", request);
+            logger.LogDebug("Got version request: {request}", request);
         }
 
         var selectedDownloads = versionRequests.Select(request =>
             versionRequestMatcher.GetBestSdkDownloadForRequest(request, availableSdkVersions)).ToList();
+        var returnValue = selectedDownloads.DistinctBy(i => i.DisplayVersion).ToImmutableArray();
+        
+        logger.LogInformation("Will download the following SDKs: {sdkList}", string.Join(", ", returnValue.Select(i => i.DisplayVersion)));
 
-        return selectedDownloads.DistinctBy(i => i.DisplayVersion).ToImmutableArray();
+        return returnValue;
     }
 
     private IEnumerable<DotNetReleaseMetadata> GetDotNetVersionsFromChannel(Version version,
