@@ -25,7 +25,7 @@ jobs:
           dotnet-version: 8.0.x
       - name: Set version information
         id: nbgv
-        uses: dotnet/nbgv@master
+        uses: dotnet/nbgv@v0.4.1
   build:
     needs: 
       - version
@@ -100,11 +100,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: "Create tag for current version"
-        uses: rickstaa/action-create-tag@v1
-        with:
-          tag: ${{ needs.version.outputs.SemVer2 }}
-          tag_exists_error: false
       - name: Download build artifacts
         uses: actions/download-artifact@v4.0.0
       - name: Zip artifacts
