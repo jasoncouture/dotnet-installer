@@ -5,18 +5,10 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PublishAot>true</PublishAot>
+        <ToolCommandName>install-sdk</ToolCommandName>
+        <PackAsTool>true</PackAsTool>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(PublishAsTool)' != 'true'">
-        <PublishAot>true</PublishAot>
-        <RuntimeIdentifiers>osx-arm64;linux-x64;win-x64</RuntimeIdentifiers>
-        <PublishDir>../bin/native</PublishDir>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(PublishAsTool)' == 'true'">
-        <ToolCommandName>auto-install</ToolCommandName>
-        <PublishDir>../bin/tool</PublishDir>
-    </PropertyGroup>
-
+    
 
     <ItemGroup>
         <ProjectReference Include="..\StrangeSoft.DotNetInstaller.Core\StrangeSoft.DotNetInstaller.Core.csproj"/>
