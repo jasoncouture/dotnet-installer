@@ -84,14 +84,10 @@ jobs:
       - name: .NET Publish - ${{ needs.version.outputs.SemVer2 }} (${{ matrix.rid }})
         run: |
           dotnet publish StrangeSoft.DotNetInstaller -o publish/ -r ${{ matrix.rid }}
-      - name: Add version text file to published output
-        shell: bash
-        run: |
-          echo $AssemblyFileVersion > publish/version.txt
       - name: Upload installer app with debug symbols
         uses: actions/upload-artifact@v4.0.0
         with:
-          name: ${{ matrix.rid }}-debug
+          name: installer-${{ matrix.rid }}-debug-${{ needs.version.outputs.AssemblyFileVersion }}
           path: publish/*
       - name: Delete debug symbols
         shell: bash
@@ -101,7 +97,7 @@ jobs:
         uses: actions/upload-artifact@v4.0.0
         with:
           name: installer-${{ matrix.rid }}-${{ needs.version.outputs.AssemblyFileVersion }}
-          path: publish/*'
+          path: publish/*
   
   release:
     runs-on: ubuntu-latest
@@ -117,17 +113,23 @@ jobs:
           fetch-depth: 0
       - name: Download build artifacts
         uses: actions/download-artifact@v4.0.0
+        with:
+          path: ~/artifacts/
       - name: Zip artifacts
         shell: bash
         run: |
-          for dir in */
+          mkdir -p ~/release_artifacts
+          pushd ~/artifacts
+          for dir in ~/artifacts/*/
           do
-            zip -j -r "$(basename $dir).zip" $dir/*
+            zip -r "~/release_artifacts/$(basename $dir).zip" $dir/*
           done
+          popd
+          mv ~/release_artifacts ./
       - name: Create Release
         uses: ncipollo/release-action@v1.13.0
         with:
-          artifacts: "*.zip"
+          artifacts: "release_artifacts/*.zip"
           generateReleaseNotes: true
           commit: main
           tag: "v${{ needs.version.outputs.SemVer2 }}"
