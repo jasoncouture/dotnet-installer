@@ -29,21 +29,6 @@ jobs:
       - version
     strategy:
       matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
-          - windows-latest
-        rid:
-          - win-x64
-          - linux-x64
-          - linux-arm64
-          - osx-arm64
-        cross-compile:
-          - true
-          - false
-        configuration:
-          - Release
-          - Debug
         include:
           - os: windows-latest
             rid: win-x64
@@ -79,7 +64,7 @@ jobs:
             configuration: Release
     
     runs-on: ${{ matrix.os }}
-    name: "Build ${{ matrix.rid }}"
+    name: "Build ${{ matrix.rid }}, configuration: ${{ matrix.configuration }}"
     steps:
       - uses: actions/checkout@v3
         with:
