@@ -177,5 +177,8 @@ jobs:
           tag: "v${{ needs.version.outputs.SemVer2 }}"
           artifactErrorsFailBuild: true
           name: "Automatic Release - ${{ needs.version.outputs.SemVer2 }}"
-          
+      - name: Push NuGet package
+        run: |
+          dotnet nuget push artifacts/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json
+
     
