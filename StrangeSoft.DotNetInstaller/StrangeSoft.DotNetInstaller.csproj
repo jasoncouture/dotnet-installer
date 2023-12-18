@@ -5,7 +5,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <ToolCommandName>install-sdk</ToolCommandName>
+        <ToolCommandName>dotnet-install-sdk</ToolCommandName>
         <PackAsTool>true</PackAsTool>
     </PropertyGroup>
     
