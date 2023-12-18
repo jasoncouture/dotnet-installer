@@ -122,22 +122,18 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v4.0.0
         with:
-          path: ~/artifacts/
+          path: artifacts/
       - name: Zip artifacts
         shell: bash
         run: |
-          mkdir -p ~/release_artifacts
-          pushd ~/artifacts
-          for dir in ~/artifacts/*/
+          for dir in artifacts/*/
           do
-            zip -r "~/release_artifacts/$(basename $dir).zip" $dir/*
+            zip -r "artifacts/$(basename $dir).zip" $dir/*
           done
-          popd
-          mv ~/release_artifacts ./
       - name: Create Release
         uses: ncipollo/release-action@v1.13.0
         with:
-          artifacts: "release_artifacts/*.zip"
+          artifacts: "artifacts/*.zip"
           generateReleaseNotes: true
           commit: main
           tag: "v${{ needs.version.outputs.SemVer2 }}"
