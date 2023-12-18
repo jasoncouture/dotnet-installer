@@ -33,21 +33,53 @@ jobs:
           - ubuntu-latest
           - macos-latest
           - windows-latest
+        rid:
+          - win-x64
+          - linux-x64
+          - linux-arm64
+          - osx-arm64
+        cross-compile:
+          - true
+          - false
+        configuration:
+          - Release
+          - Debug
         include:
           - os: windows-latest
             rid: win-x64
             cross-compile: false
+            configuration: Debug
+          - os: windows-latest
+            rid: win-x64
+            cross-compile: false
+            configuration: Release
           - os: ubuntu-latest
             rid: linux-x64
             cross-compile: false
+            configuration: Debug
+          - os: ubuntu-latest
+            rid: linux-x64
+            cross-compile: false
+            configuration: Release
           - os: ubuntu-latest
             rid: linux-arm64
             cross-compile: true
+            configuration: Debug
+          - os: ubuntu-latest
+            rid: linux-arm64
+            cross-compile: true
+            configuration: Release
           - os: macos-latest
             rid: osx-arm64
             cross-compile: false
+            configuration: Debug
+          - os: macos-latest
+            rid: osx-arm64
+            cross-compile: false
+            configuration: Release
     
     runs-on: ${{ matrix.os }}
+    name: "Build ${{ matrix.rid }}"
     steps:
       - uses: actions/checkout@v3
         with:
@@ -83,20 +115,11 @@ jobs:
           echo "AssemblyInformationalVersion=${{ needs.version.outputs.AssemblyInformationalVersion }}" >> $GITHUB_ENV
       - name: .NET Publish - ${{ needs.version.outputs.SemVer2 }} (${{ matrix.rid }})
         run: |
-          dotnet publish StrangeSoft.DotNetInstaller -o publish/ -r ${{ matrix.rid }}
+          dotnet publish StrangeSoft.DotNetInstaller -o publish/ -r ${{ matrix.rid }} -c ${{ matrix.configuration }}
       - name: Upload installer app with debug symbols
         uses: actions/upload-artifact@v4.0.0
         with:
-          name: installer-${{ matrix.rid }}-debug-${{ needs.version.outputs.AssemblyFileVersion }}
-          path: publish/*
-      - name: Delete debug symbols
-        shell: bash
-        run: |
-          rm publish/*.pdb
-      - name: Upload installer app without debug symbols
-        uses: actions/upload-artifact@v4.0.0
-        with:
-          name: installer-${{ matrix.rid }}-${{ needs.version.outputs.AssemblyFileVersion }}
+          name: installer-${{ matrix.rid }}-${{ matrix.configuration }}-${{ needs.version.outputs.AssemblyFileVersion }}
           path: publish/*
   
   release:
