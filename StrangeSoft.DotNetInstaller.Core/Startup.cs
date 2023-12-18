@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging;
 using StrangeSoft.DotNetInstaller.Core.Logging;
 using StrangeSoft.DotNetInstaller.Core.Platform;
+using StrangeSoft.DotNetInstaller.Core.Platform.Linux;
+using StrangeSoft.DotNetInstaller.Core.Platform.MacOS;
 using StrangeSoft.DotNetInstaller.Core.Platform.Windows;
 using StrangeSoft.DotNetInstaller.Core.Scanner;
 using StrangeSoft.DotNetInstaller.Core.Serialization;
@@ -43,21 +45,30 @@ public static class Startup
     public static IServiceCollection BuildApplication(CommandLineOptions options)
     {
         var serviceCollection = new ServiceCollection();
-        serviceCollection.AddSingleton(options);
         
         serviceCollection.AddLogging(ConfigureLogging);
+        
+        // HTTP
         serviceCollection.AddHttpClient<ISdkVersionLoader, SdkVersionLoader>();
         serviceCollection.AddHttpClient<IDotNetInstaller, DotNetInstaller>();
         
-        serviceCollection.AddScoped<IPlatformPackageInstaller, WindowsPlatformPackageInstaller>();
-        serviceCollection.AddScoped<IVersionRequestMatcher, VersionRequestMatcher>();
+        serviceCollection.AddSingleton(options);
+        
+        // Platform Support
+        serviceCollection.AddSingleton<IPlatformPackageInstaller, WindowsPlatformPackageInstaller>();
+        serviceCollection.AddSingleton<IPlatformPackageInstaller, LinuxPlatformPackageInstaller>();
+        serviceCollection.AddSingleton<IPlatformPackageInstaller, MacOSPlatformPackageInstaller>();
+        
+        serviceCollection.AddSingleton<IVersionRequestMatcher, VersionRequestMatcher>();
+        serviceCollection.AddSingleton<IRuntimeIdentifierSelector, RuntimeIdentifierSelector>();
+        serviceCollection.AddSingleton<IHashVerifier, HashVerifier>();
+        serviceCollection.AddSingleton<IJsonSerializer, SourceGeneratedJsonSerializer>();
+        
         serviceCollection.AddScoped<IVersionScanner, ProjectVersionScanner>();
         serviceCollection.AddScoped<IVersionScanner, GlobalJsonVersionScanner>();
         serviceCollection.AddScoped<IVersionCollector, VersionCollector>();
-        serviceCollection.AddScoped<IRuntimeIdentifierSelector, RuntimeIdentifierSelector>();
-        serviceCollection.AddScoped<IHashVerifier, HashVerifier>();
         serviceCollection.AddScoped<IApp, App>();
-        serviceCollection.AddScoped<IJsonSerializer, SourceGeneratedJsonSerializer>();
+
 
         return serviceCollection;
     }

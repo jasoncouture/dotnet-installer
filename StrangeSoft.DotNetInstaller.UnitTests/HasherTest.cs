@@ -1,5 +1,4 @@
-﻿using StrangeSoft.DotNetInstaller.Core;
-using StrangeSoft.DotNetInstaller.Core.Tools;
+﻿using StrangeSoft.DotNetInstaller.Core.Tools;
 
 namespace StrangeSoft.DotNetInstaller.UnitTests;
 

@@ -1,6 +1,3 @@
-﻿using System.Collections.Immutable;
-using Microsoft.Extensions.Http;
+﻿namespace StrangeSoft.DotNetInstaller.Core;
 
-namespace StrangeSoft.DotNetInstaller.Core;
-
-public record CommandLineOptions(Uri DownloadUri, DirectoryInfo BasePath);
+public record CommandLineOptions(Uri DownloadUri, DirectoryInfo BasePath, bool NoCache, DirectoryInfo? InstallPath = null, bool UserInstall = false);
