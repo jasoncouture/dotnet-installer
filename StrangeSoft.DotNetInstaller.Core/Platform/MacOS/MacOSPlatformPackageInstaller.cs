@@ -8,7 +8,7 @@ public class MacOSPlatformPackageInstaller : IPlatformPackageInstaller
     public bool Enabled => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
     public async Task<int> InstallAsync(string path, bool force, CancellationToken cancellationToken)
     {
-        var processStartInformation = new ProcessStartInfo(path)
+        var processStartInformation = new ProcessStartInfo("installer")
         {
             ArgumentList =
             {
