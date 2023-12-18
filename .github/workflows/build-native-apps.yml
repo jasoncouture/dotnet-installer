@@ -92,7 +92,7 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
-      - name: Setup build enviroment
+      - name: Setup build environment
         shell: bash
         run: |
           echo "AssemblyVersion=${{ needs.version.outputs.AssemblyVersion }}" >> $GITHUB_ENV
@@ -101,17 +101,50 @@ jobs:
       - name: .NET Publish - ${{ needs.version.outputs.SemVer2 }} (${{ matrix.rid }})
         run: |
           dotnet publish StrangeSoft.DotNetInstaller -o publish/ -r ${{ matrix.rid }} -c ${{ matrix.configuration }} -p:PublishAot=true 
-      - name: Upload installer app with debug symbols
+      - name: Upload installer app symbols
         uses: actions/upload-artifact@v4.0.0
         with:
           name: installer-${{ matrix.rid }}-${{ matrix.configuration }}-${{ needs.version.outputs.AssemblyFileVersion }}
           path: publish/*
-  
+  pack:
+    runs-on: ubuntu-latest
+    needs: 
+      - version
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/cache@v3.3.2
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }} #hash of project files
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+      - name: Setup build environment
+        shell: bash
+        run: |
+          echo "AssemblyVersion=${{ needs.version.outputs.AssemblyVersion }}" >> $GITHUB_ENV
+          echo "AssemblyFileVersion=${{ needs.version.outputs.AssemblyFileVersion }}" >> $GITHUB_ENV
+          echo "AssemblyInformationalVersion=${{ needs.version.outputs.AssemblyInformationalVersion }}" >> $GITHUB_ENV
+      - name: Create NuGet package
+        run: |
+          dotnet pack -o publish
+      - name: Upload NuGet package
+        uses: actions/upload-artifact@v4.0.0
+        with:
+          name: nuget-package
+          path: publish/*.nupkg
+          
   release:
     runs-on: ubuntu-latest
     needs:
       - version
       - build
+      - pack
     permissions:
       contents: write
     steps:
