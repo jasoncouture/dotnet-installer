@@ -54,6 +54,11 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.rid }}-nuget-${{ hashFiles('**/*.csproj') }} #hash of project files
           restore-keys: |
             ${{ runner.os }}-${{ matrix.rid }}-nuget-
+      - name: Install cross compilation tools
+        if: runner.os == 'Linux'
+        uses: taiki-e/setup-cross-toolchain-action@v1
+        with:
+          target: aarch64-unknown-linux-gnu
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
