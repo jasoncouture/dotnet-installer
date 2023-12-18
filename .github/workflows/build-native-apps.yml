@@ -157,12 +157,14 @@ jobs:
         uses: actions/download-artifact@v4.0.0
         with:
           path: artifacts/
+      - name: Move NuGet package
+        run: |
+          mv artifacts/nuget-package/*.nupkg artifacts/
+          rm -rf artifacts/nuget-package
       - name: Zip artifacts
         shell: bash
         run: |
           for dir in artifacts/*/
-          mv artifacts/nuget-package/*.nupkg artifacts/
-          rm -rf artifacts/nuget-package
           do
             zip -r "artifacts/$(basename $dir).zip" $dir/*
           done
