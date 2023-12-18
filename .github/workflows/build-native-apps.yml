@@ -21,8 +21,9 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Set version information
-        id: nbgv
         uses: dotnet/nbgv@v0.4.1
+        id: nbgv
+
   build:
     needs:
       - version
@@ -71,7 +72,7 @@ jobs:
         run: |
           echo $AssemblyFileVersion > publish/version.txt
       - name: Upload installer app with debug symbols
-        uses: actions/upload-artifact
+        uses: actions/upload-artifact@v4.0.0
         with:
           name: ${{ matrix.rid }}-debug
           path: publish/*
@@ -80,7 +81,7 @@ jobs:
         run: |
           rm publish/*.pdb
       - name: Upload installer app without debug symbols
-        uses: actions/upload-artifact
+        uses: actions/upload-artifact@v4.0.0
         with:
           name: installer-${{ matrix.rid }}-${{ needs.version.outputs.AssemblyFileVersion }}
           path: publish/*'
