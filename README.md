@@ -11,3 +11,9 @@ If you do have .NET 8.0 installed, simply run `dotnet tool install --global Stra
 ### NOTE
 
 OS-X and Linux support are experimental. Please submit an issue if you encounter a bug.
+
+
+### Support
+If you like this tool, consider buying me a coffee!
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/coffeepot)
