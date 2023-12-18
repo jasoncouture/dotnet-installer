@@ -141,6 +141,7 @@ jobs:
           path: publish/*.nupkg
           
   release:
+    name: "Create release v${{ needs.version.outputs.SemVer2 }}"
     runs-on: ubuntu-latest
     needs:
       - version
