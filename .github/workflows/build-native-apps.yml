@@ -107,6 +107,7 @@ jobs:
           name: installer-${{ matrix.rid }}-${{ matrix.configuration }}-${{ needs.version.outputs.AssemblyFileVersion }}
           path: publish/*
   pack:
+    name: "Create NuGet package ${{ needs.version.outputs.SemVer2 }}"
     runs-on: ubuntu-latest
     needs: 
       - version
@@ -160,13 +161,15 @@ jobs:
         shell: bash
         run: |
           for dir in artifacts/*/
+          mv artifacts/nuget-package/*.nupkg artifacts/
+          rm -rf artifacts/nuget-package
           do
             zip -r "artifacts/$(basename $dir).zip" $dir/*
           done
       - name: Create Release
         uses: ncipollo/release-action@v1.13.0
         with:
-          artifacts: "artifacts/*.zip"
+          artifacts: "artifacts/*.zip,artifacts/*.nupkg"
           generateReleaseNotes: true
           commit: main
           tag: "v${{ needs.version.outputs.SemVer2 }}"
