@@ -7,7 +7,7 @@
         <Nullable>enable</Nullable>
         <ToolCommandName>dotnet-install-sdk</ToolCommandName>
         <PackAsTool>true</PackAsTool>
-        <PackageLicenseExpression>GPL-3.0</PackageLicenseExpression>
+        <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
     
