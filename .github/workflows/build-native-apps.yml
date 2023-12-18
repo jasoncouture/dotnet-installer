@@ -35,15 +35,17 @@ jobs:
           - windows-latest
         include:
           - os: windows-latest
-            rid: windows-x64
+            rid: win-x64
+            cross-compile: false
           - os: ubuntu-latest
             rid: linux-x64
+            cross-compile: false
           - os: ubuntu-latest
             rid: linux-arm64
+            cross-compile: true
           - os: macos-latest
             rid: osx-arm64
-          - os: macos-latest
-            rid: osx-x64
+            cross-compile: false
     
     runs-on: ${{ matrix.os }}
     steps:
@@ -57,7 +59,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ matrix.rid }}-nuget-
       - name: Install cross compilation tools
-        if: runner.os == 'Linux'
+        if: matrix.cross-compile == true
         uses: taiki-e/setup-cross-toolchain-action@v1
         with:
           target: aarch64-unknown-linux-gnu
