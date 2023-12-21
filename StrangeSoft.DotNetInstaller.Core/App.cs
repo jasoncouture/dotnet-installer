@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Microsoft.Extensions.Logging;
 using StrangeSoft.DotNetInstaller.Core.Platform;
 using StrangeSoft.DotNetInstaller.Core.Scanner;
 using StrangeSoft.DotNetInstaller.Core.Tools;
@@ -42,6 +44,18 @@ public class App(
                 logger.LogWarning(".NET SDK {version} appears to have failed to install with exit code {exitCode}", version.DisplayVersion, exitCode);
             }
         }
+
+        var foregroundColor = Console.ForegroundColor;
+        Console.Write('[');
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.Write("REMINDER");
+        Console.ForegroundColor = foregroundColor;
+        Console.Write("] If you downloaded this tool manually, don't forget to install it as a .NET tool, IE: ");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("dotnet tool install --global StrangeSoft.DotNetInstaller");
+        Console.ForegroundColor = foregroundColor;
+        Console.WriteLine();
+        Console.WriteLine("You may need to restart your shell for the installation to be available");
         return 0;
     }
 }
