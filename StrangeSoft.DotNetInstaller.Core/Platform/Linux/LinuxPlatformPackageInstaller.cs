@@ -100,7 +100,8 @@ public class LinuxPlatformPackageInstaller(
                 continue;
             if (entry.EntryType is not TarEntryType.Directory)
             {
-                logger.LogInformation("Extracting: {path}, size: {size}, permissions: {permissions:F}", target, entry.Length, entry.Mode);
+                logger.LogInformation("Extracting: {path}, size: {size}, permissions: {permissions:F}", target,
+                    entry.Length, entry.Mode);
                 await entry.ExtractToFileAsync(target, true, cancellationToken);
             }
             else
@@ -110,7 +111,62 @@ public class LinuxPlatformPackageInstaller(
             }
         }
 
+        try
+        {
+            CreateSymlink(installPath, options.UserInstall);
+        }
+        catch (IOException ex)
+        {
+            logger.LogWarning(ex, "Failed to create symlink, an IO Exception occurred");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            logger.LogWarning(ex, "Failed to create symlink, access is denied");
+        }
+
         return 0;
+    }
+
+    private void CreateSymlink(string installPath, bool userInstall)
+    {
+        var targetPath = Path.Combine(GetTargetPath(userInstall), "dotnet");
+        var installedPath = Path.Combine(installPath, "dotnet");
+        logger.LogInformation("Creating symlink {systemPath} -> {installedPath}", targetPath, installedPath);
+        File.CreateSymbolicLink(targetPath, installedPath);
+    }
+
+    const string SystemInstallPath = "/usr/local/bin";
+
+    private string GetTargetPath(bool userInstall)
+    {
+        if (!userInstall)
+        {
+            if (!Directory.Exists(SystemInstallPath))
+            {
+                Directory.CreateDirectory(
+                    SystemInstallPath,
+                    UnixFileMode.UserWrite | UnixFileMode.UserRead | UnixFileMode.UserExecute |
+                    UnixFileMode.GroupRead | UnixFileMode.GroupExecute |
+                    UnixFileMode.OtherRead | UnixFileMode.OtherExecute
+                );
+            }
+
+            return SystemInstallPath;
+        }
+
+        var targetPath = Path.GetFullPath("~/bin");
+        if (Directory.Exists(targetPath)) return targetPath;
+
+        targetPath = Path.GetFullPath("~/.local/bin");
+        if (Directory.Exists(targetPath)) return targetPath;
+
+        logger.LogWarning("Neither ~/.local/bin nor ~/bin could be found, assuming we should use, and creating: {path}",
+            targetPath);
+        Directory.CreateDirectory(targetPath,
+            UnixFileMode.UserExecute | UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.GroupRead |
+            UnixFileMode.GroupExecute);
+
+        return targetPath;
     }
 
     private bool ShouldSkipEntry(bool force, TarEntry entry, string target)
@@ -142,6 +198,7 @@ public class LinuxPlatformPackageInstaller(
                         "Skipping {path}, system modification time is more recent than the archive file", target);
                     return true;
                 }
+
                 break;
         }
 
