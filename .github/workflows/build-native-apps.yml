@@ -174,7 +174,7 @@ jobs:
       - name: Create Release
         uses: ncipollo/release-action@v1.13.0
         with:
-          artifacts: "artifacts/*.zip,artifacts/*.nupkg"
+          artifacts: "artifacts/*.zip,artifacts/*.nupkg;LICENSE.md"
           generateReleaseNotes: true
           commit: main
           tag: "v${{ needs.version.outputs.SemVer2 }}"
