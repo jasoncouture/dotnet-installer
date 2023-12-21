@@ -54,11 +54,6 @@ public class VersionCollector(
             availableSdkVersions.AddRange(dotNetChannel.Releases.Select(i => i.Sdk).Where(i => i is not null)!);
         }
 
-        foreach (var request in versionRequests)
-        {
-            logger.LogDebug("Got version request: {request}", request);
-        }
-
         var selectedDownloads = versionRequests.Select(request =>
             versionRequestMatcher.GetBestSdkDownloadForRequest(request, availableSdkVersions)).ToList();
         var returnValue = selectedDownloads.DistinctBy(i => i.DisplayVersion).ToImmutableArray();
