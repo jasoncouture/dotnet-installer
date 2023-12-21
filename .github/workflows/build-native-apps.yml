@@ -167,7 +167,9 @@ jobs:
         run: |
           for dir in artifacts/*/
           do
-            zip -r "artifacts/$(basename $dir).zip" $dir/*
+            pushd $dir
+            zip -r "../$(basename $dir).zip" *
+            popd
           done
       - name: Create Release
         uses: ncipollo/release-action@v1.13.0
