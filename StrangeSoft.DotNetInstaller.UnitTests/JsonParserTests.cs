@@ -1,5 +1,6 @@
 using System.Text.Json;
 using StrangeSoft.DotNetInstaller.Core.Models;
+using StrangeSoft.DotNetInstaller.Core.Models.SdkConfiguration;
 using DotNetMetadataJsonSerializerContext = StrangeSoft.DotNetInstaller.Core.Serialization.DotNetMetadataJsonSerializerContext;
 
 namespace StrangeSoft.DotNetInstaller.UnitTests;
@@ -38,9 +39,9 @@ public class JsonParserTests
 
     [Theory]
     [MemberData(nameof(GenerateGlobalJsonTestCases))]
-    public void GlobalJson_CanDeserialize()
+    public void GlobalJson_CanDeserialize(string globalJson)
     {
-
+        JsonSerializer.Deserialize(globalJson, DotNetMetadataJsonSerializerContext.Default.GlobalJson);
     }
 
     public static IEnumerable<object[]> GenerateGlobalJsonTestCases()
@@ -63,6 +64,13 @@ public class JsonParserTests
                         "sdk": {
                           "version": "6.0.300",
                           "rollForward": "disabled"
+                        }
+                      }
+                     """;
+        yield return """
+                      {
+                        "sdk": {
+                          "version": "6.0.300"
                         }
                       }
                      """;
