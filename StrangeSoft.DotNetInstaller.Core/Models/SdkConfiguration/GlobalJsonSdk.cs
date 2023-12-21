@@ -8,6 +8,6 @@ public record GlobalJsonSdk
     public ExtendedVersion? Version { get; init; }
     [JsonPropertyName("allowPrerelease")]
     public bool? AllowPreRelease { get; init; }
-    [JsonPropertyName("rollForward")]
+    [JsonPropertyName("rollForward"), JsonConverter(typeof(JsonStringEnumConverter<RollForwardOption>))]
     public RollForwardOption? RollForward { get; init; }
 }

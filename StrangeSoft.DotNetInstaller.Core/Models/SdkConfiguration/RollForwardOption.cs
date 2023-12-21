@@ -2,7 +2,7 @@
 
 public enum RollForwardOption
 {
-    Disable,
+    Disabled,
     Patch,
     Feature,
     Minor,

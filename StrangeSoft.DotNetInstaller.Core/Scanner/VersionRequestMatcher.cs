@@ -22,7 +22,7 @@ public class VersionRequestMatcher : IVersionRequestMatcher
 
         return request.RollForwardOption switch
         {
-            RollForwardOption.Disable => GetExactMatchOrThrow(request.Version, orderedVersions),
+            RollForwardOption.Disabled => GetExactMatchOrThrow(request.Version, orderedVersions),
             RollForwardOption.Patch => GetNearestPatch(request.Version, orderedVersions),
             RollForwardOption.Feature => GetNearestFeature(request.Version, orderedVersions),
             RollForwardOption.Minor => GetNearestMinor(request.Version, orderedVersions),
