@@ -93,7 +93,7 @@ public class LinuxPlatformPackageInstaller(
             if (entry is null) break;
             if (entry.EntryType is TarEntryType.GlobalExtendedAttributes)
                 continue;
-            var target = Path.Combine(installPath, entry.Name);
+            var target = Path.GetFullPath(Path.Combine(installPath, entry.Name));
 
             if (ShouldSkipEntry(force, entry, target))
                 continue;
