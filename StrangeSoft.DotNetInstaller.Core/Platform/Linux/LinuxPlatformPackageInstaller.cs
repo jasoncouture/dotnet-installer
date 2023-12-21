@@ -130,6 +130,11 @@ public class LinuxPlatformPackageInstaller(
     private void CreateSymlink(string installPath, bool userInstall)
     {
         var targetPath = Path.Combine(GetTargetPath(userInstall), "dotnet");
+        if (File.Exists(targetPath))
+        {
+            logger.LogInformation("Skipping creating symlink {path}, file exists", targetPath);
+            return;
+        }
         var installedPath = Path.Combine(installPath, "dotnet");
         logger.LogInformation("Creating symlink {systemPath} -> {installedPath}", targetPath, installedPath);
         File.CreateSymbolicLink(targetPath, installedPath);
