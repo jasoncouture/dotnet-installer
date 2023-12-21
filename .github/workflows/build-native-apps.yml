@@ -64,7 +64,7 @@ jobs:
             configuration: Release
     
     runs-on: ${{ matrix.os }}
-    name: "Build v${{ needs.version.outputs.SemVer2 }}-${{ matrix.rid }}-${{ matrix.configuration }}"
+    name: "Build ${{ matrix.rid }}-${{ matrix.configuration }}"
     steps:
       - uses: actions/checkout@v3
         with:
@@ -104,7 +104,7 @@ jobs:
       - name: Upload installer app symbols
         uses: actions/upload-artifact@v4.0.0
         with:
-          name: installer-${{ matrix.rid }}-${{ matrix.configuration }}-${{ needs.version.outputs.AssemblyFileVersion }}
+          name: installer-${{ matrix.rid }}-${{ matrix.configuration }}
           path: publish/*
   pack:
     name: "Create NuGet package ${{ needs.version.outputs.SemVer2 }}"
