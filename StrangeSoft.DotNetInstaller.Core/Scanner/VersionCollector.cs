@@ -22,6 +22,11 @@ public class VersionCollector(
         logger.LogInformation("Scanning {path} with the following glob patterns: {globs}", basePath,
             string.Join(", ", allGlobs.Select(i => $"'{i}'")));
         filesystemMatcher.AddIncludePatterns(allGlobs);
+        filesystemMatcher
+            .AddExclude("**/.*") // Ignore all dot files/folders
+            .AddExclude("**/bin")
+            .AddExclude("**/obj");
+        
         var allFiles = filesystemMatcher.GetResultsInFullPath(basePath.FullName).ToArray();
         logger.LogInformation("Found {count} file(s) to check", allFiles.Length);
         var inMemoryDirectory = new InMemoryDirectoryInfo(basePath.FullName, allFiles);
