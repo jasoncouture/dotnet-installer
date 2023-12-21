@@ -1,6 +1,7 @@
 ﻿#pragma warning disable CA1416 // Code only executes on linux
 using System.Formats.Tar;
 using System.IO.Compression;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.Logging;
 
@@ -97,9 +98,16 @@ public class LinuxPlatformPackageInstaller(
 
             if (ShouldSkipEntry(force, entry, target))
                 continue;
-
-            logger.LogInformation("Extracting: {path}, size: {size}", target, entry.Length);
-            await entry.ExtractToFileAsync(target, true, cancellationToken);
+            if (entry.EntryType is not TarEntryType.Directory)
+            {
+                logger.LogInformation("Extracting: {path}, size: {size}, permissions: {permissions:F}", target, entry.Length, entry.Mode);
+                await entry.ExtractToFileAsync(target, true, cancellationToken);
+            }
+            else
+            {
+                logger.LogInformation("Creating directory {path} with permissions {permissions:F}", target, entry.Mode);
+                Directory.CreateDirectory(target, entry.Mode);
+            }
         }
 
         return 0;
@@ -107,25 +115,34 @@ public class LinuxPlatformPackageInstaller(
 
     private bool ShouldSkipEntry(bool force, TarEntry entry, string target)
     {
-        if (entry.EntryType is TarEntryType.RegularFile or TarEntryType.ContiguousFile or TarEntryType.SparseFile
-                or TarEntryType.V7RegularFile && File.Exists(target))
+        // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
+        switch (entry.EntryType)
         {
-            var lastModified = new DateTimeOffset(File.GetLastWriteTimeUtc(target), TimeSpan.Zero);
-            if (force) return false;
+            case TarEntryType.Directory:
+                if (Directory.Exists(target))
+                    return true;
+                break;
+            case TarEntryType.RegularFile:
+            case TarEntryType.ContiguousFile:
+            case TarEntryType.SparseFile:
+            case TarEntryType.V7RegularFile:
+                var lastModified = new DateTimeOffset(File.GetLastWriteTimeUtc(target), TimeSpan.Zero);
+                if (force) return false;
 
-            var fileInfo = new FileInfo(target);
-            if (entry.ModificationTime == lastModified && entry.Length == fileInfo.Length)
-            {
-                logger.LogInformation("Skipping {path}, file size and modification times match", target);
-                return true;
-            }
+                var fileInfo = new FileInfo(target);
+                if (entry.ModificationTime == lastModified && entry.Length == fileInfo.Length)
+                {
+                    logger.LogInformation("Skipping {path}, file size and modification times match", target);
+                    return true;
+                }
 
-            if (entry.ModificationTime < lastModified)
-            {
-                logger.LogInformation(
-                    "Skipping {path}, system modification time is more recent than the archive file", target);
-                return true;
-            }
+                if (entry.ModificationTime < lastModified)
+                {
+                    logger.LogInformation(
+                        "Skipping {path}, system modification time is more recent than the archive file", target);
+                    return true;
+                }
+                break;
         }
 
         return false;
