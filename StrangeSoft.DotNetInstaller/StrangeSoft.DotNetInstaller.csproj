@@ -10,6 +10,8 @@
         <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageTags>utility;installer;sdk;tool</PackageTags>
+        <RootNamespace>StrangeSoft.DotNetInstaller</RootNamespace>
+        <AssemblyName>dotnet-install-sdk</AssemblyName>
     </PropertyGroup>
     
 
