@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.Logging;
+using StrangeSoft.DotNetInstaller.Core.Models;
 using StrangeSoft.DotNetInstaller.Core.Models.Releases;
 using StrangeSoft.DotNetInstaller.Core.Tools;
 
@@ -56,6 +57,13 @@ public class VersionCollector(
 
         var selectedDownloads = versionRequests.Select(request =>
             versionRequestMatcher.GetBestSdkDownloadForRequest(request, availableSdkVersions)).ToList();
+        // Inject 8.0, so we can install ourselves if we need to.
+        if (selectedDownloads.All(i => i.Version.Version.Major != 8 && i.Version.Version.Minor != 0))
+        {
+            selectedDownloads.Add(versionRequestMatcher.GetBestSdkDownloadForRequest(
+                new SdkVersionRequest(new ExtendedVersion(new Version(8, 0))), availableSdkVersions));
+        }
+
         var returnValue = selectedDownloads.DistinctBy(i => i.DisplayVersion).ToImmutableArray();
 
         logger.LogInformation("Will download the following SDKs: {sdkList}", string.Join(", ", returnValue.Select(i => i.DisplayVersion)));
