@@ -67,16 +67,4 @@ public class VersionCollector(
 
         return returnValue;
     }
-
-    private IEnumerable<DotNetReleaseMetadata> GetDotNetVersionsFromChannel(Version version,
-        IEnumerable<DotNetChannel> channels)
-    {
-        var channel = channels.SingleOrDefault(
-            i => i.ChannelVersion.Major == version.Major && i.ChannelVersion.Minor == version.Minor);
-
-        if (channel is null)
-            throw new InvalidOperationException($"Unable to find channel {version.ToString(2)}");
-
-        return channel.Releases;
-    }
 }
