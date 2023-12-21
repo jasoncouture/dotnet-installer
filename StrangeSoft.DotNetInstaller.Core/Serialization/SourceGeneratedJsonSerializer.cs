@@ -7,8 +7,8 @@ public class SourceGeneratedJsonSerializer : IJsonSerializer
     public async Task<T?> DeserializeAsync<T>(Stream stream, CancellationToken cancellationToken) where T : class
     {
         return await JsonSerializer.DeserializeAsync(
-            stream, 
-            typeof(T), 
+            stream,
+            typeof(T),
             DotNetMetadataJsonSerializerContext.Default,
             cancellationToken) as T;
     }

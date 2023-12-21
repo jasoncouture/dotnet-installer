@@ -21,10 +21,9 @@ public class JsonParserTests
     [InlineData("6.0.123", "6.0.123", null)]
     public void ExtendedVersionParsesCorrectly(string input, string expectedVersion, string? expectedExtra)
     {
-      var result = ExtendedVersion.FromVersionString(input);
-      Assert.NotNull(result);
-      Assert.Equal( Version.Parse(expectedVersion), result.Version);
-      Assert.Equal(expectedExtra, result.Extra);
+        var result = ExtendedVersion.FromVersionString(input);
+        Assert.Equal(Version.Parse(expectedVersion), result.Version);
+        Assert.Equal(expectedExtra, result.Extra);
     }
 
     [Fact]
@@ -39,14 +38,14 @@ public class JsonParserTests
 
     [Theory]
     [MemberData(nameof(GenerateGlobalJsonTestCases))]
-    public void GlobalJson_CanDeserialize(string json)
+    public void GlobalJson_CanDeserialize()
     {
-        
+
     }
 
     public static IEnumerable<object[]> GenerateGlobalJsonTestCases()
     {
-      return GenerateGlobalJsonStringTestCases().Select(i => new object[] { i });
+        return GenerateGlobalJsonStringTestCases().Select(i => new object[] { i });
     }
 
     private static IEnumerable<string> GenerateGlobalJsonStringTestCases()

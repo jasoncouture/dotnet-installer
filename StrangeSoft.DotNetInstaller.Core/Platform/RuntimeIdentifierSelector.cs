@@ -32,10 +32,10 @@ public sealed class RuntimeIdentifierSelector() : IRuntimeIdentifierSelector
             )
         };
     }
-    
+
     public bool IsRuntimeIdentifierSelected(string? runtimeIdentifier)
     {
-        if (runtimeIdentifier is null) 
+        if (runtimeIdentifier is null)
             return false;
         return string.Equals(DetermineCurrentRuntimeIdentifier(), runtimeIdentifier, StringComparison.OrdinalIgnoreCase);
     }

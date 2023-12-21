@@ -6,9 +6,9 @@ using StrangeSoft.DotNetInstaller.Core.Tools;
 namespace StrangeSoft.DotNetInstaller.Core;
 
 public class App(
-    ISdkVersionLoader versionLoader, 
-    CommandLineOptions options, 
-    IVersionCollector versionCollector, 
+    ISdkVersionLoader versionLoader,
+    CommandLineOptions options,
+    IVersionCollector versionCollector,
     ILogger<App> logger,
     IDotNetInstaller installer,
     IRuntimeIdentifierSelector runtimeIdentifierSelector

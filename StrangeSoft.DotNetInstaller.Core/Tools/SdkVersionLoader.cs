@@ -16,22 +16,22 @@ public class SdkVersionLoader(
     {
         logger.LogInformation("Fetching .NET Release channels from {uri}", options.DownloadUri);
         await using var stream = await httpClient.GetStreamAsync(options.DownloadUri, cancellationToken);
-        
+
         var result = await jsonSerializer.DeserializeAsync<DotNetChannelIndex>(stream, cancellationToken) ?? throw new InvalidOperationException();
-        
+
         logger.LogInformation("Found {count} channels. Available .NET Release channels: {channelList}", result.Releases.Length, string.Join(", ", result.Releases.Select(i => i.ChannelVersion.ToString(2))));
 
         return result;
     }
-    
+
     public async ValueTask<DotNetChannel?> GetChannelAsync(DotNetChannelIndex index, Version version, CancellationToken cancellationToken)
     {
         var (result, channel) = await TryGetCachedChannelAsync(version, cancellationToken);
-        if (result) 
+        if (result)
             return channel;
         var indexEntry = index.Releases.FirstOrDefault(i =>
             i.ChannelVersion.Major == version.Major && i.ChannelVersion.Minor == version.Minor);
-        if (indexEntry is null) 
+        if (indexEntry is null)
             return null;
         var url = indexEntry.ReleasesJson;
         var downloadTarget = Path.GetTempFileName();
@@ -76,11 +76,11 @@ public class SdkVersionLoader(
         {
             // Failed to deserialize
         }
-        catch(FileNotFoundException)
+        catch (FileNotFoundException)
         {
             // Our file somehow went missing between us checking for it, and then trying to read it.
         }
-        
+
         return (false, null);
     }
 }

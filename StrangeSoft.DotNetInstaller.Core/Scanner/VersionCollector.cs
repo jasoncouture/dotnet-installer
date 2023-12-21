@@ -26,7 +26,7 @@ public class VersionCollector(
             .AddExclude("**/.*") // Ignore all dot files/folders
             .AddExclude("**/bin")
             .AddExclude("**/obj");
-        
+
         var allFiles = filesystemMatcher.GetResultsInFullPath(basePath.FullName).ToArray();
         logger.LogInformation("Found {count} file(s) to check", allFiles.Length);
         var inMemoryDirectory = new InMemoryDirectoryInfo(basePath.FullName, allFiles);
@@ -62,7 +62,7 @@ public class VersionCollector(
         var selectedDownloads = versionRequests.Select(request =>
             versionRequestMatcher.GetBestSdkDownloadForRequest(request, availableSdkVersions)).ToList();
         var returnValue = selectedDownloads.DistinctBy(i => i.DisplayVersion).ToImmutableArray();
-        
+
         logger.LogInformation("Will download the following SDKs: {sdkList}", string.Join(", ", returnValue.Select(i => i.DisplayVersion)));
 
         return returnValue;

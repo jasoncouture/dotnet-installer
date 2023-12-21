@@ -23,7 +23,7 @@ public class JsonCrawlTest
         var httpClient = new HttpClient()
         {
             DefaultRequestHeaders = { Accept = { new MediaTypeWithQualityHeaderValue("application/json") } }
-        };  
+        };
         const string indexUrl = "https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json";
         var indexUri = new Uri(indexUrl);
 

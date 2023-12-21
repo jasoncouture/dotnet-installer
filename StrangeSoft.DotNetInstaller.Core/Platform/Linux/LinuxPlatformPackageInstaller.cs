@@ -158,7 +158,7 @@ public class LinuxPlatformPackageInstaller(
 
             return SystemInstallPath;
         }
-        
+
         var targetPath = Path.GetFullPath("bin", Environment.GetEnvironmentVariable("HOME")!);
         if (Directory.Exists(targetPath)) return targetPath;
 
@@ -168,7 +168,7 @@ public class LinuxPlatformPackageInstaller(
         logger.LogWarning("Neither ~/.local/bin nor ~/bin could be found, assuming we should use, and creating: {path}",
             targetPath);
         Directory.CreateDirectory(targetPath,
-            UnixFileMode.UserExecute | UnixFileMode.UserRead | UnixFileMode.UserWrite | 
+            UnixFileMode.UserExecute | UnixFileMode.UserRead | UnixFileMode.UserWrite |
             UnixFileMode.GroupRead | UnixFileMode.GroupExecute);
 
         return targetPath;

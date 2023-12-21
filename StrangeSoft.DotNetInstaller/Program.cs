@@ -16,15 +16,15 @@ public static class Program
         var downloadUrlOption = new Option<Uri>("--download-url", parseArgument: ParseUri!, description: "Set the dotnet manifest JSON URL, You shouldn't need to change this.");
         var forceOption = new Option<bool>("--force", "Force installation, even if administrative privileges do not appear to be present.");
         var noCacheOption = new Option<bool>("--no-cache", "Disable caching, and always download the latest installer from Microsoft.");
-        
+
         forceOption.AddAlias("-f");
-        
+
         basePathOption.SetDefaultValue(new DirectoryInfo("."));
         downloadUrlOption.SetDefaultValue(
             new Uri("https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json"));
         forceOption.SetDefaultValue(false);
         noCacheOption.SetDefaultValue(false);
-        
+
         var rootCommand = new RootCommand(".NET SDK Install tool");
         rootCommand.AddOption(downloadUrlOption);
         rootCommand.AddOption(forceOption);
@@ -89,7 +89,7 @@ public static class Program
 
     public static async Task<int> StartApp(
         Uri downloadUrl,
-        DirectoryInfo basePath, 
+        DirectoryInfo basePath,
         bool noCache,
         bool force
     ) =>

@@ -30,7 +30,7 @@ internal class NakedConsoleOutputLogger : ILogger
     {
         if (!IsEnabled(logLevel))
             return;
-        
+
         var color = logLevel switch
         {
             LogLevel.Trace or LogLevel.Debug => ConsoleColor.Gray,
@@ -39,7 +39,7 @@ internal class NakedConsoleOutputLogger : ILogger
             LogLevel.None => throw new InvalidOperationException("Invalid log level: None"),
             _ => ConsoleColor.Red
         };
-        
+
         _semaphore.Wait();
         try
         {
