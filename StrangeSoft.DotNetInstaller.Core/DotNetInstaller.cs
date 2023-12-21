@@ -49,7 +49,8 @@ public class DotNetInstaller : IDotNetInstaller
 
     private static string GetDownloadFilePath(DownloadInformationFile downloadInformation)
     {
-        return Path.Combine(Path.GetTempPath(), Path.GetFileName(downloadInformation.Url.LocalPath));
+        var basePath = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "dotnet-sdk-install", Environment.UserName));
+        return Path.Combine(basePath.FullName, Path.GetFileName(downloadInformation.Url.LocalPath));
     }
 
     public async Task<int> DownloadAndInstallAsync(DownloadInformationFile downloadInformation,

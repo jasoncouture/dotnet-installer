@@ -54,7 +54,7 @@ public class SdkVersionLoader(
 
     private static string GetChannelCacheFileName(Version version)
     {
-        var tempPath = Path.GetTempPath();
+        var tempPath = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "dotnet-sdk-installer", Environment.UserName)).FullName;
         var fileName = $"dotnet-sdk-channel-{version.ToString(2)}.json";
         var fullPath = Path.Combine(tempPath, fileName);
         return fullPath;
