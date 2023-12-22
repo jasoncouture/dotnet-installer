@@ -11,9 +11,10 @@ on:
 
 jobs:
   build:
-
+    name: Unit Tests
     runs-on: ubuntu-latest
-
+    permissions: 
+      checks: write
     steps:
       - uses: actions/checkout@v3
         with:
@@ -35,5 +36,12 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
+      - name: dotnet-tests-report
+        uses: zyborg/dotnet-tests-report@v1.4.4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          project_path: StrangeSoft.DotNetInstaller.UnitTests
+          report_name: unit_tests
+          report_title: "Unit Test Results"
+          set_check_status_from_test_outcome: true
+          
