@@ -133,12 +133,14 @@ jobs:
           echo "AssemblyInformationalVersion=${{ needs.version.outputs.AssemblyInformationalVersion }}" >> $GITHUB_ENV
       - name: Create NuGet package
         run: |
-          dotnet pack -o publish
+          dotnet pack -o publish -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:StripSymbols=false -p:DebugSymbols=true -p:DebugType=Pdb
       - name: Upload NuGet package
         uses: actions/upload-artifact@v4.0.0
         with:
           name: nuget-package
-          path: publish/*.nupkg
+          path: |
+            publish/*.nupkg
+            publish/*.snupkg
   nuget:
     name: "Publish NuGet packages"
     runs-on: ubuntu-latest
