@@ -13,6 +13,11 @@
         <RootNamespace>StrangeSoft.DotNetInstaller</RootNamespace>
         <AssemblyName>dotnet-install-sdk</AssemblyName>
         <PackageId>$(RootNamespace)</PackageId>
+        <Description>
+            This is a tool to install the .NET SDKs needed by a path. The path is scanned for various project files used by .NET, and automatically determines the SDK versions that need to be installed, then installs them.
+            
+            It uses the official microsoft .NET release manifests to find, download, and verify the .NET SDKs.
+        </Description>
     </PropertyGroup>
     
 
