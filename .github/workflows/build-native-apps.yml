@@ -149,6 +149,7 @@ jobs:
       - pack
     permissions:
       contents: write
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -180,8 +181,11 @@ jobs:
           tag: "v${{ needs.version.outputs.SemVer2 }}"
           artifactErrorsFailBuild: true
           name: "${{ needs.version.outputs.SemVer2 }}"
-      - name: "Push NuGet package ${{ needs.version.outputs.SemVer2 }}"
+      - name: "Push NuGet package ${{ needs.version.outputs.SemVer2 }} (NuGet.org)"
         run: |
           dotnet nuget push artifacts/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json
+      - name: "Push NuGet Package ${{ needs.version.outputs.SemVer2 }} (github.com)"
+        run: |
+          dotnet nuget push artifacts/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/jasoncouture/index.json"
 
     
