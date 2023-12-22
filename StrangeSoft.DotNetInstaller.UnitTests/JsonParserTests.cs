@@ -39,14 +39,19 @@ public class JsonParserTests
 
     [Theory]
     [MemberData(nameof(GenerateGlobalJsonTestCases))]
-    public void GlobalJson_CanDeserialize(string globalJson)
+    public void GlobalJson_CanDeserialize(JsonTestCaseWrapper jsonWrapper)
     {
-        JsonSerializer.Deserialize(globalJson, DotNetMetadataJsonSerializerContext.Default.GlobalJson);
+        JsonSerializer.Deserialize(jsonWrapper.Json, DotNetMetadataJsonSerializerContext.Default.GlobalJson);
     }
 
     public static IEnumerable<object[]> GenerateGlobalJsonTestCases()
     {
-        return GenerateGlobalJsonStringTestCases().Select(i => new object[] { i });
+        return GenerateGlobalJsonStringTestCases().Select((i, index) => new object[] { new JsonTestCaseWrapper($"JSON Example {index}", i) });
+    }
+
+    public record JsonTestCaseWrapper(string Name, string Json)
+    {
+      public override string ToString() => Name;
     }
 
     private static IEnumerable<string> GenerateGlobalJsonStringTestCases()
@@ -91,4 +96,16 @@ public class JsonParserTests
                      }
                      """;
     }
+}
+
+public record TestCaseWithName(string Name, object[] Parameters)
+{
+  public override string ToString()
+  {
+    return Name;
+  }
+  public static implicit operator object[](TestCaseWithName testCase)
+  {
+    return testCase.Parameters;
+  }
 }
