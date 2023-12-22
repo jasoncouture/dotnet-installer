@@ -5,13 +5,13 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <ToolCommandName>dotnet-install-sdk</ToolCommandName>
+        <ToolCommandName>dotnet-install-sdks</ToolCommandName>
         <PackAsTool>true</PackAsTool>
         <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageTags>utility;installer;sdk;tool</PackageTags>
         <RootNamespace>StrangeSoft.DotNetInstaller</RootNamespace>
-        <AssemblyName>dotnet-install-sdk</AssemblyName>
+        <AssemblyName>dotnet-install-sdks</AssemblyName>
         <PackageId>$(RootNamespace)</PackageId>
         <Description>
             This is a tool to install the .NET SDKs needed by a path. The path is scanned for various project files used by .NET, and automatically determines the SDK versions that need to be installed, then installs them.
