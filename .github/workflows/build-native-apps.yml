@@ -143,7 +143,6 @@ jobs:
     name: "Publish NuGet package - ${{ matrix.source }}"
     runs-on: ubuntu-latest
     needs:
-      - release
       - pack
     steps:
       - name: Setup .NET
