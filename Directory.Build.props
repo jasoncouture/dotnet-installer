@@ -10,6 +10,7 @@
     <Company>StrangeSoft</Company>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/jasoncouture/dotnet-installer.git</RepositoryUrl>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
