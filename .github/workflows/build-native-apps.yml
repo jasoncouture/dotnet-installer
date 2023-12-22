@@ -139,7 +139,32 @@ jobs:
         with:
           name: nuget-package
           path: publish/*.nupkg
-          
+  nuget:
+    name: "Publish NuGet package - ${{ matrix.source }}"
+    runs-on: ubuntu-latest
+    needs:
+      - release
+      - pack
+    strategy: 
+      matrix:
+        include:
+          - source: https://api.nuget.org/v3/index.json
+            api-key: ${{ secrets.NUGET_KEY }}
+          - source: https://nuget.pkg.github.com/jasoncouture/index.json
+            api-key: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+      - name: Download package artifact
+        uses: actions/download-artifact@v4.0.0
+        with:
+          name: nuget-package
+          path: artifacts/
+      - run: |
+          dotnet nuget push artifacts/*.nupkg --api-key ${{ matrix.api-key }} --source ${{ matrix.source }}
+
   release:
     name: "Create release"
     runs-on: ubuntu-latest
