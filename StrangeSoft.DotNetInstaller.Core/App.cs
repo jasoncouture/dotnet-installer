@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using StrangeSoft.DotNetInstaller.Core.Platform;
 using StrangeSoft.DotNetInstaller.Core.Scanner;
 using StrangeSoft.DotNetInstaller.Core.Tools;
@@ -20,7 +18,6 @@ public class App(
     {
         logger.LogInformation("Fetching .NET Release channels");
         var index = await versionLoader.GetDotNetChannels(cancellationToken);
-        logger.LogInformation("Scanning \"{path}\" for .NET versions to install", options.BasePath.FullName);
         var versions = await versionCollector.GetInstallersAsync(index, options.BasePath, cancellationToken);
         versions = versions.DistinctBy(i => i.DisplayVersion);
         foreach (var version in versions)
