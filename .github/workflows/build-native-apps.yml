@@ -196,17 +196,11 @@ jobs:
       - name: "Create Release v${{ needs.version.outputs.SemVer2 }}"
         uses: ncipollo/release-action@v1.13.0
         with:
-          artifacts: "artifacts/*.zip,artifacts/*.nupkg,LICENSE.md"
+          artifacts: "artifacts/*.zip,artifacts/*.nupkg;artifacts/*.snupkg,LICENSE.md"
           generateReleaseNotes: true
           commit: main
           tag: "v${{ needs.version.outputs.SemVer2 }}"
           artifactErrorsFailBuild: true
           name: "${{ needs.version.outputs.SemVer2 }}"
-      - name: "Push NuGet package ${{ needs.version.outputs.SemVer2 }} (NuGet.org)"
-        run: |
-          dotnet nuget push artifacts/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json
-      - name: "Push NuGet Package ${{ needs.version.outputs.SemVer2 }} (github.com)"
-        run: |
-          dotnet nuget push artifacts/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/jasoncouture/index.json"
 
     
