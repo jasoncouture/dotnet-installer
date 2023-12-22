@@ -182,7 +182,7 @@ jobs:
           path: artifacts/
       - name: Move NuGet package
         run: |
-          mv artifacts/nuget-package/*.nupkg artifacts/
+          mv artifacts/nuget-package/* artifacts/
           rm -rf artifacts/nuget-package
       - name: Zip artifacts
         shell: bash
@@ -196,7 +196,7 @@ jobs:
       - name: "Create Release v${{ needs.version.outputs.SemVer2 }}"
         uses: ncipollo/release-action@v1.13.0
         with:
-          artifacts: "artifacts/*.zip,artifacts/*.nupkg;artifacts/*.snupkg,LICENSE.md"
+          artifacts: "artifacts/*.zip,artifacts/*.nupkg,artifacts/*.snupkg,LICENSE.md"
           generateReleaseNotes: true
           commit: main
           tag: "v${{ needs.version.outputs.SemVer2 }}"
