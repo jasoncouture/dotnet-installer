@@ -140,8 +140,10 @@ jobs:
           name: nuget-package
           path: publish/*.nupkg
   nuget:
-    name: "Publish NuGet package - ${{ matrix.source }}"
+    name: "Publish NuGet packages"
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     needs:
       - pack
     steps:
@@ -167,7 +169,6 @@ jobs:
       - pack
     permissions:
       contents: write
-      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
