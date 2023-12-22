@@ -81,5 +81,14 @@ public class JsonParserTests
                         }
                       }
                      """;
+        yield return """
+                     {
+                       "sdk": {
+                         "allowPrerelease": true,
+                         "version": "7.0.404",
+                         "rollForward": "latestMajor"
+                       }
+                     }
+                     """;
     }
 }
