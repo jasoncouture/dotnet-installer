@@ -7,6 +7,10 @@ on:
 env:
   ContinuousIntegrationBuild: true
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   version:
     runs-on: ubuntu-latest
