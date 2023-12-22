@@ -12,6 +12,7 @@
         <PackageTags>utility;installer;sdk;tool</PackageTags>
         <RootNamespace>StrangeSoft.DotNetInstaller</RootNamespace>
         <AssemblyName>dotnet-install-sdk</AssemblyName>
+        <PackageId>$(RootNamespace)</PackageId>
     </PropertyGroup>
     
 
