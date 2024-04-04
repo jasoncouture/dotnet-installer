@@ -155,10 +155,12 @@ jobs:
         include:
           - name: "nuget.org"
             source: https://api.nuget.org/v3/index.json
-            api-key: ${{ secrets.NUGET_KEY }}
+            #api-key: ${{ secrets.NUGET_KEY }}
+            secret: NUGET_KEY
           - name: "github.com"
             source: https://nuget.pkg.github.com/jasoncouture/index.json
-            api-key: ${{ secrets.GITHUB_TOKEN }}
+            # api-key: ${{ secrets.GITHUB_TOKEN }}
+            secret: GITHUB_TOKEN
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -175,7 +177,7 @@ jobs:
           name: nuget-package
           path: artifacts/
       - name: Publish
-        run: 'dotnet nuget push artifacts/*.nupkg --api-key "${{ matrix.api-key }}" --source "${{ matrix.source }}"'
+        run: 'dotnet nuget push artifacts/*.nupkg --api-key "${{ secrets[matrix.secret] }}" --source "${{ matrix.source }}"'
 
   release:
     name: "Create release"
