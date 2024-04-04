@@ -148,7 +148,7 @@ jobs:
           path: |
             publish/*.nupkg
             publish/*.snupkg
-  nuget:
+  publish:
     name: "Publish NuGet packages (${{ matrix.name }})"
     strategy:
       matrix:
@@ -186,6 +186,7 @@ jobs:
       - version
       - build
       - pack
+      - publish
     permissions:
       contents: write
     steps:
