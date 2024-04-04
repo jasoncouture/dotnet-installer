@@ -165,9 +165,10 @@ jobs:
         with:
           name: nuget-package
           path: artifacts/
-      - run: |
-          dotnet nuget push artifacts/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source "https://api.nuget.org/v3/index.json"
-          dotnet nuget push artifacts/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/jasoncouture/index.json"
+      - name: Publish to NuGet.org
+        run: 'dotnet nuget push artifacts/*.nupkg --api-key "${{ secrets.NUGET_KEY }}" --source "https://api.nuget.org/v3/index.json"'
+      - name: Publish to NuGet.org
+        run: 'dotnet nuget push artifacts/*.nupkg --api-key "${{ secrets.GITHUB_TOKEN }}" --source "https://nuget.pkg.github.com/jasoncouture/index.json"'
 
   release:
     name: "Create release"
